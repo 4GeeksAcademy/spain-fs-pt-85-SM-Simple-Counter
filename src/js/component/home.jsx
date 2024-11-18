@@ -1,24 +1,16 @@
 import React from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
 //create your first component
-const Home = () => {
+const Home = (props) => {
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="d-flex bg-dark justify-content-center">
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder"><i className="fa-regular fa-clock"></i></div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberCentenaDeMillar}</div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberDecenaDeMillar}</div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberMillar}</div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberCentena}</div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberDecena}</div>
+			<div className="bg-dark m-3 p-4 border border-5 border-light-subtle rounded text-white fs-1 fw-bolder">{props.numberUnidad}</div>
 		</div>
 	);
 };
