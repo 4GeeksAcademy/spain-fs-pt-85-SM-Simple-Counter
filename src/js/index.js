@@ -8,18 +8,14 @@ import "../styles/index.css";
 //import your own components
 import Home from "./component/home.jsx";
 import { render } from "react-dom";
-import Button from "./component/button.jsx";
-
-//funciones a cargar cuando se inicia la página
-window.onload = function(){
-    CalculoEImpresionContador();
-    escuchaParar();
-}
 
 // constante root para que se pueda hacer llamadas de root render ya que createRoot solo se debe realizar una vez
 const root = ReactDOM.createRoot(document.getElementById("app"));
 
+//variable que almacena el contador del número que se ira actualizando cada segundo
 let numero = 0;
+
+//función para obtener y actualizar el número en el código html
 function CalculoEImpresionContador(){
     let unidades = numero % 10;                
     let decenas = Math.floor(numero / 10) % 10; 
@@ -27,7 +23,7 @@ function CalculoEImpresionContador(){
     let millares = Math.floor(numero /1000) % 10;
     let decenaDeMillares = Math.floor(numero / 10_000) % 10;
     let centenaDeMillares = Math.floor(numero / 100_000) % 10;
-    //renderizar la 
+    //renederizar la información
     root.render(<Home
         numberUnidad={unidades} 
         numberDecena={decenas}
@@ -41,34 +37,39 @@ function CalculoEImpresionContador(){
         );
 }
 
-let intervalo = setInterval(() =>{
-    //se llama a la función para obtener y actualizar el número en el código html
-    CalculoEImpresionContador()
-    //se aumenta en 1 el número
-    numero++;
-}, 1000);
+//se llama a la funcion recien definida para que carguen los datos de la página
+CalculoEImpresionContador()
+
+//se define variable globalmente para poder ser llamada en funciones de modificación de comportamiento del contador
+let intervalo = null;
 
 function escuchaEmpezar(){
-    botonEmpezar.addEventListener("click", (e) =>{
-        intervalo;
-    });
+    //se crea condifión if para que no se pueda iniciar varias veces el contador
+    if (!intervalo) {
+        intervalo = setInterval(() =>{
+            CalculoEImpresionContador()
+            numero++;
+        }, 1000);
+    }
+    console.log("empezar");
 }
 
 function escuchaParar(){
-    let botonParar = document.querySelector("#Parar")
-    botonParar.addEventListener("click", (e) =>{
-        clearInterval(intervalo);
-    });
+    //se elimina el intervalo generado en empezar y se devuelve la variable a null para que pueda volver a ser inicializada
+    //desde botón empezar
+    clearInterval(intervalo);
+    intervalo = null
+    console.log("parar");
 }
 
 function escuchaReset(){
-    botonReset.addEventListener("click", (e) =>{
-        clearInterval(intervalo);
-        numero = 0;
-        CalculoEImpresionContador();
-    });
+    escuchaParar()
+    numero = 0;
+    CalculoEImpresionContador();
+    console.log("reset");
 }
 
+export {escuchaEmpezar, escuchaParar, escuchaReset}
 
 // En un principio había creado esta forma de contar para que se evalúe en que punto estamos
 // e igualando cada variable inicialmente a 0 de tal forma que así para cuando cualquier valor
