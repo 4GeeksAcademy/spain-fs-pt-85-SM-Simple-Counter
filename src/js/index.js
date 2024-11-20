@@ -13,16 +13,18 @@ import { render } from "react-dom";
 const root = ReactDOM.createRoot(document.getElementById("app"));
 
 //variable que almacena el contador del número que se ira actualizando cada segundo
-let numero = 0;
+let segundos = 0;
+
+let segundosObjetivo = null;
 
 //función para obtener y actualizar el número en el código html
 function CalculoEImpresionContador(){
-    let unidades = numero % 10;                
-    let decenas = Math.floor(numero / 10) % 10; 
-    let centenas = Math.floor(numero / 100) % 10; 
-    let millares = Math.floor(numero /1000) % 10;
-    let decenaDeMillares = Math.floor(numero / 10_000) % 10;
-    let centenaDeMillares = Math.floor(numero / 100_000) % 10;
+    let unidades = segundos % 10;                
+    let decenas = Math.floor(segundos / 10) % 10; 
+    let centenas = Math.floor(segundos / 100) % 10; 
+    let millares = Math.floor(segundos /1000) % 10;
+    let decenaDeMillares = Math.floor(segundos / 10_000) % 10;
+    let centenaDeMillares = Math.floor(segundos / 100_000) % 10;
     //renederizar la información
     root.render(<Home
         numberUnidad={unidades} 
@@ -31,10 +33,13 @@ function CalculoEImpresionContador(){
         numberMillar={millares}
         numberDecenaDeMillar={decenaDeMillares}
         numberCentenaDeMillar={centenaDeMillares}/>)
-        if (numero === 1_000_000) return (
+        if (segundos === 1_000_000) return (
             clearInterval(intervalo),
-            alert("Enhorabuena, llegaste hasta el final, actualiza la página para volver a empezar")
-        );
+            alert("Enhorabuena, llegaste hasta el final, actualiza la página para volver a empezar"));
+        else if (segundosObjetivo == segundos) return (
+            clearInterval(intervalo),
+            alert(`Se ha alcanzado el número ${segundosObjetivo}`));
+        
 }
 
 //se llama a la funcion recien definida para que carguen los datos de la página
@@ -48,7 +53,7 @@ function escuchaEmpezar(){
     if (!intervalo) {
         intervalo = setInterval(() =>{
             CalculoEImpresionContador()
-            numero++;
+            segundos++;
         }, 1000);
     }
     console.log("empezar");
@@ -64,12 +69,24 @@ function escuchaParar(){
 
 function escuchaReset(){
     escuchaParar()
-    numero = 0;
+    segundos = 0;
     CalculoEImpresionContador();
     console.log("reset");
 }
 
-export {escuchaEmpezar, escuchaParar, escuchaReset}
+function validaNumeros(e){
+    if (!/[0-9]/.test(e.key)) 
+        {e.preventDefault();}
+}
+
+function establecerSegundosObjetivo(){
+    let numeroObjetivo = document.querySelector("#numeroObjetivo").value;
+    console.log(numeroObjetivo);
+    segundosObjetivo = numeroObjetivo;
+    console.log(segundosObjetivo);
+}
+
+export {escuchaEmpezar, escuchaParar, escuchaReset, validaNumeros, establecerSegundosObjetivo}
 
 // En un principio había creado esta forma de contar para que se evalúe en que punto estamos
 // e igualando cada variable inicialmente a 0 de tal forma que así para cuando cualquier valor
